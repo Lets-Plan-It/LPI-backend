@@ -8,6 +8,7 @@ import java.util.Set;
  * Entity class representing a user.
  */
 @Entity
+@Table(name = "user_entity")
 public class UserEntity {
 
     @Id
@@ -21,6 +22,9 @@ public class UserEntity {
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
+
+    public UserEntity() {
+    }
 
     /**
      * Retrieves the user's email.

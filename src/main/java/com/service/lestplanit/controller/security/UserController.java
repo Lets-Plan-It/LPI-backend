@@ -6,8 +6,10 @@ import com.service.lestplanit.models.security.RoleEntity;
 import com.service.lestplanit.models.security.UserEntity;
 import com.service.lestplanit.services.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +20,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -40,15 +45,11 @@ public class UserController {
      */
     @PostMapping("/create-user")
     public UserEntity createUser(@RequestBody CreateUserDTO user) {
-        Set<RoleEntity> roles = user.getRoles().stream()
-                .map(role -> new RoleEntity(ERole.valueOf(role)))
-                .collect(Collectors.toSet());
-
         UserEntity newUser = new UserEntity();
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setUsername(user.getUsername());
 
-        return userService.createUser(roles, newUser);
+        return userService.createUser(new HashSet<>(user.getRoles()), newUser);
     }
 }

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
  * Entity class representing user roles.
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "role_entity")
 public class RoleEntity {
 
     @Id
@@ -14,15 +14,20 @@ public class RoleEntity {
     private Long id;
 
     // Enum representing the role name (e.g., ROLE_USER, ROLE_ADMIN)
-    private ERole role;
+    @Enumerated(EnumType.STRING)
+    private ERole name;
+
+    public RoleEntity() {
+    }
 
     /**
      * Constructor to create a RoleEntity object with the given role.
      *
      * @param role The ERole representing the role name.
      */
+
     public RoleEntity(ERole role) {
-        this.role = role;
+        this.name = role;
     }
 
     /**
@@ -30,16 +35,16 @@ public class RoleEntity {
      *
      * @return The ERole representing the role name.
      */
-    public ERole getRole() {
-        return role;
+    public ERole getName() {
+        return name;
     }
 
     /**
      * Sets the role name.
      *
-     * @param role The ERole representing the role name to set.
+     * @param name The ERole representing the role name to set.
      */
-    public void setRole(ERole role) {
-        this.role = role;
+    public void setName(ERole name) {
+        this.name = name;
     }
 }
