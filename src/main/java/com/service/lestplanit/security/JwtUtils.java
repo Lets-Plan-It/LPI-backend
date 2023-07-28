@@ -1,14 +1,16 @@
 package com.service.lestplanit.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.Date;
 import java.util.function.Function;
 
 @Component
@@ -24,14 +26,13 @@ public class JwtUtils {
      * @param username The username for whom the token will be generated.
      * @return The generated access token (JWT).
      */
-    public String generateAcessToken(String username){
-        byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
-
+    public String generateAccessToken(String username){
         String token = Jwts.builder()
                 .setSubject(username)
-                .signWith(SignatureAlgorithm.HS256, keyBytes)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(timeExpiration)))
+                .signWith(getSignatureKey(), SignatureAlgorithm.HS256)
                 .compact();
-
         return token;
     }
 
@@ -46,11 +47,11 @@ public class JwtUtils {
             Jwts.parserBuilder()
                     .setSigningKey(getSignatureKey())
                     .build()
-                    .parseClaimsJwt(token)
-                    .getBody();
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            System.out.println("There was an error related to validate the token");
+            System.out.println("There was an error related to validate the token.");
+            e.printStackTrace();
             return false;
         }
     }
@@ -88,7 +89,7 @@ public class JwtUtils {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignatureKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -98,7 +99,7 @@ public class JwtUtils {
      * @return The signature key.
      */
     public Key getSignatureKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

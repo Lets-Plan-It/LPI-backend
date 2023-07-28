@@ -1,5 +1,6 @@
 package com.service.lestplanit.security;
 
+import com.service.lestplanit.security.filters.JwtAuthorizationFilter;
 import com.service.lestplanit.services.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,15 +12,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class WebSecurityConfig {
 
     @Autowired
-    private JwtUtils jwtUtils;
+    JwtUtils jwtUtils;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private JwtAuthorizationFilter authorizationFilter;
 
     /**
      * Configures the security filter chain for HTTP requests.
@@ -45,6 +49,7 @@ public class WebSecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .addFilter(jwtAuthenticationFilter)
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
