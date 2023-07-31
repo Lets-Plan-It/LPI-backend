@@ -1,9 +1,8 @@
-package com.service.lestplanit.repositories.security;
+package com.service.lestplanit.security.repositories;
 
-import com.service.lestplanit.models.security.UserEntity;
+import com.service.lestplanit.security.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

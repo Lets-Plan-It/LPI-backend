@@ -1,7 +1,10 @@
-package com.service.lestplanit.controller.request;
+package com.service.lestplanit.security.controller.request;
 
 import java.util.List;
 
+/**
+ * Data Transfer Object (DTO) used to create a new user.
+ */
 public class CreateUserDTO {
 
     private String email;
@@ -9,7 +12,6 @@ public class CreateUserDTO {
     private String password;
     private List<String> roles;
 
-    // Getters and Setters
     public String getEmail() {
         return email;
     }

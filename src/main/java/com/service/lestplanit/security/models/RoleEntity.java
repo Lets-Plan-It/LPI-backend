@@ -1,4 +1,4 @@
-package com.service.lestplanit.models.security;
+package com.service.lestplanit.security.models;
 
 import jakarta.persistence.*;
 

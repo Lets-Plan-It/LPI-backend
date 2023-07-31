@@ -1,7 +1,7 @@
 package com.service.lestplanit.security.filters;
 
 import com.service.lestplanit.security.JwtUtils;
-import com.service.lestplanit.services.security.UserDetailsServiceImpl;
+import com.service.lestplanit.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +31,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             String token = tokenHeader.substring(7);
             if (jwtUtils.isTokenValid(token)){
-                System.out.println("Validated...!!");
-                System.out.println(token);
                 String username = jwtUtils.getUsernameFromToken(token);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken =

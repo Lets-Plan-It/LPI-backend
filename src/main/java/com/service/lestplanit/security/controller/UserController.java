@@ -1,29 +1,24 @@
-package com.service.lestplanit.controller.security;
+package com.service.lestplanit.security.controller;
 
-import com.service.lestplanit.controller.request.CreateUserDTO;
-import com.service.lestplanit.models.security.ERole;
-import com.service.lestplanit.models.security.RoleEntity;
-import com.service.lestplanit.models.security.UserEntity;
-import com.service.lestplanit.services.security.UserService;
+import com.service.lestplanit.security.controller.request.CreateUserDTO;
+import com.service.lestplanit.security.models.UserEntity;
+import com.service.lestplanit.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Controller class to handle user-related operations.
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/system-users")
 public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private UserService userService;
 

@@ -1,7 +1,8 @@
-package com.service.lestplanit.security;
+package com.service.lestplanit.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.lestplanit.models.security.UserEntity;
+import com.service.lestplanit.security.models.UserEntity;
+import com.service.lestplanit.security.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

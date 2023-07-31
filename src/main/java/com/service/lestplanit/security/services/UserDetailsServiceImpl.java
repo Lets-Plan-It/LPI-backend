@@ -1,7 +1,7 @@
-package com.service.lestplanit.services.security;
+package com.service.lestplanit.security.services;
 
-import com.service.lestplanit.models.security.UserEntity;
-import com.service.lestplanit.repositories.security.UserRepository;
+import com.service.lestplanit.security.models.UserEntity;
+import com.service.lestplanit.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

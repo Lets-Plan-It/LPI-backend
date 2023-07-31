@@ -1,15 +1,14 @@
-package com.service.lestplanit.services.security;
+package com.service.lestplanit.security.services;
 
-import com.service.lestplanit.models.security.ERole;
-import com.service.lestplanit.models.security.RoleEntity;
-import com.service.lestplanit.models.security.UserEntity;
-import com.service.lestplanit.repositories.security.RoleRepository;
-import com.service.lestplanit.repositories.security.UserRepository;
+import com.service.lestplanit.security.models.ERole;
+import com.service.lestplanit.security.models.RoleEntity;
+import com.service.lestplanit.security.models.UserEntity;
+import com.service.lestplanit.security.repositories.RoleRepository;
+import com.service.lestplanit.security.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.*;
 import java.util.stream.Collectors;
 

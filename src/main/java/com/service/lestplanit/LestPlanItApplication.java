@@ -1,26 +1,23 @@
 package com.service.lestplanit;
 
-import com.service.lestplanit.models.security.ERole;
-import com.service.lestplanit.models.security.RoleEntity;
-import com.service.lestplanit.models.security.UserEntity;
-import com.service.lestplanit.services.security.UserService;
+import com.service.lestplanit.security.models.UserEntity;
+import com.service.lestplanit.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
-public class LestplanitApplication {
+public class LestPlanItApplication {
 
     @Autowired
     private UserService userService;
     public static void main(String[] args) {
-        SpringApplication.run(LestplanitApplication.class, args);
+        SpringApplication.run(LestPlanItApplication.class, args);
     }
 
     @Bean
