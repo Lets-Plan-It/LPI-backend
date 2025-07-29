@@ -46,9 +46,10 @@ public class SubscriptionController {
      * @param subscription The subscription to be created.
      * @return The created subscription.
      */
+//    TODO: Create a DTO to create a subscription including the person and event ids
     @PostMapping
     public ResponseEntity<Subscription> createSubscription(@RequestBody Subscription subscription) {
-        Subscription createdSubscription = subscriptionService.createSubscription(subscription);
+        Subscription createdSubscription = subscriptionService.createSubscription(subscription, null, null);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
     }
 

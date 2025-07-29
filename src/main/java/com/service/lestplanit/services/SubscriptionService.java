@@ -1,11 +1,16 @@
 package com.service.lestplanit.services;
 
 import com.service.lestplanit.exceptions.ItemNotFoundException;
+import com.service.lestplanit.models.Event;
+import com.service.lestplanit.models.Person;
 import com.service.lestplanit.models.Subscription;
+import com.service.lestplanit.repositories.EventRepository;
+import com.service.lestplanit.repositories.PersonRepository;
 import com.service.lestplanit.repositories.SubscriptionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +23,10 @@ public class SubscriptionService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private PersonRepository personRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     /**
      * Retrieves all subscriptions.
@@ -50,7 +59,17 @@ public class SubscriptionService {
      * @param subscription The subscription to be created.
      * @return The created subscription.
      */
-    public Subscription createSubscription(Subscription subscription) {
+    @Transactional
+    public Subscription createSubscription(Subscription subscription,
+                                           Long personId,
+                                           Long eventId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new IllegalArgumentException("Person not found with id: " + personId));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + eventId));
+
+        subscription.setPerson(person);
+        subscription.setEvent(event);
         return subscriptionRepository.save(subscription);
     }
 

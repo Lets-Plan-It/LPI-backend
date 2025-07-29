@@ -42,7 +42,6 @@ public class UserService {
      * @return UserEntity representing the newly created user.
      */
     public UserEntity createUser(Set<String> roleNames, UserEntity user) {
-
         Set<RoleEntity> dbRoles = roleNames
                 .stream().map(role -> new RoleEntity(ERole.valueOf(role)))
                 .collect(Collectors.toSet());

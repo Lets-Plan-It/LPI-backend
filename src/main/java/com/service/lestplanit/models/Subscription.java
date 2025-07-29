@@ -28,6 +28,11 @@ public class Subscription {
     @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
     private Set<PaymentHistory> paymentHistorySet;
 
+    public Subscription() {
+        this.notes = "";
+        this.totalPayed = 0L;
+    }
+
     /**
      * Retrieves the event associated with the subscription.
      *

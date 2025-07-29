@@ -38,7 +38,7 @@ public class UserController {
      * @param user CreateUserDTO object containing user information.
      * @return UserEntity representing the newly created user.
      */
-    @PostMapping("/create-user")
+    @PostMapping
     public UserEntity createUser(@RequestBody CreateUserDTO user) {
         UserEntity newUser = new UserEntity();
         newUser.setEmail(user.getEmail());

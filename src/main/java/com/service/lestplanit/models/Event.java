@@ -3,6 +3,7 @@ package com.service.lestplanit.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +22,13 @@ public class Event {
     //TODO: Review the data type for this attribute, seems that we can improve if we can use a list of strings
     private String requirements;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private Set<Subscription> subscriptions;
+    private Set<Subscription> subscriptions = new HashSet<>();
+
+    /**
+     * Constructs a new Event with any specified parameters.
+     */
+    public Event() {
+    }
 
     /**
      * Constructs a new Event with the specified name, start date, end date, and cost.
