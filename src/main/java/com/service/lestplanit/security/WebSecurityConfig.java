@@ -32,30 +32,40 @@ public class WebSecurityConfig {
     /**
      * Configures the security filter chain for HTTP requests.
      *
-     * @param httpSecurity         The HttpSecurity instance for configuring the security filter chain.
+     * @param httpSecurity          The HttpSecurity instance for configuring the security filter chain.
      * @param authenticationManager The AuthenticationManager instance for handling authentication of users.
      * @return The configured SecurityFilterChain.
      * @throws Exception If an error occurs during configuration.
      */
+    // TODO: Update defining the paths permissions.
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
-        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/persons").permitAll();
-                    auth.requestMatchers("/system-users").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();
-                })
-                .sessionManagement(session -> {
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-                .addFilter(jwtAuthenticationFilter)
-                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
+
+//        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
+//        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
+//        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+//
+//        return httpSecurity
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(auth -> {
+//                    auth.requestMatchers("/persons").permitAll();
+//                    auth.requestMatchers("/persons/**").permitAll();
+//                    auth.requestMatchers("/events").permitAll();
+//                    auth.requestMatchers("/events/**").permitAll();
+//                    auth.requestMatchers("/system-users").permitAll();
+//                    auth.anyRequest().authenticated();
+//                })
+//                .sessionManagement(session -> {
+//                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                })
+//                .addFilter(jwtAuthenticationFilter)
+//                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .build();
     }
 
     /**
@@ -71,8 +81,8 @@ public class WebSecurityConfig {
     /**
      * AuthenticationManager bean for handling authentication of users.
      *
-     * @param httpSecurity     The HttpSecurity instance for configuring the authentication manager.
-     * @param passwordEncoder  The PasswordEncoder instance used to securely encode passwords.
+     * @param httpSecurity    The HttpSecurity instance for configuring the authentication manager.
+     * @param passwordEncoder The PasswordEncoder instance used to securely encode passwords.
      * @return The configured AuthenticationManager.
      * @throws Exception If an error occurs during configuration.
      */

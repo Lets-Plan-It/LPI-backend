@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -22,7 +23,7 @@ public class Person {
     private LocalDateTime birthdate;
     private String aboutYou;
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private Set<Subscription> subscriptions;
+    private Set<Subscription> subscriptions = new HashSet<>();
 
     /**
      * Constructs an empty Person.
@@ -50,6 +51,10 @@ public class Person {
         this.id = id;
         this.email = email;
         this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
@@ -148,7 +153,7 @@ public class Person {
      * @return the subscriptions associated with the person
      */
     public Set<Subscription> getSubscriptions() {
-        return subscriptions;
+        return this.subscriptions;
     }
 
     /**
