@@ -1,0 +1,22 @@
+server:
+  servlet:
+    contextPath: /api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lets-plan-it
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+jwt:
+  secret:
+    key: 93Qs1jCP/5eF+ajYYvVvvEl4U+BcYNx1T5x83J/g3jM=
+  time:
+    expiration: 86400000

@@ -40,26 +40,32 @@ public class WebSecurityConfig {
     // TODO: Update defining the paths permissions.
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
-        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/persons").permitAll();
-                    auth.requestMatchers("/persons/**").permitAll();
-                    auth.requestMatchers("/events").permitAll();
-                    auth.requestMatchers("/events/**").permitAll();
-                    auth.requestMatchers("/system-users").permitAll();
-                    auth.anyRequest().authenticated();
-                })
-                .sessionManagement(session -> {
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-                .addFilter(jwtAuthenticationFilter)
-                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
+
+//        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
+//        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
+//        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+//
+//        return httpSecurity
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(auth -> {
+//                    auth.requestMatchers("/persons").permitAll();
+//                    auth.requestMatchers("/persons/**").permitAll();
+//                    auth.requestMatchers("/events").permitAll();
+//                    auth.requestMatchers("/events/**").permitAll();
+//                    auth.requestMatchers("/system-users").permitAll();
+//                    auth.anyRequest().authenticated();
+//                })
+//                .sessionManagement(session -> {
+//                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                })
+//                .addFilter(jwtAuthenticationFilter)
+//                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .build();
     }
 
     /**

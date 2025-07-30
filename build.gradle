@@ -7,8 +7,6 @@ plugins {
 group = 'com.service'
 version = '0.0.1-SNAPSHOT'
 description = 'Project to provide interaction with data for LetsPlanIt'
-sourceCompatibility = '17'
-targetCompatibility = '17'
 
 repositories {
     mavenCentral()
