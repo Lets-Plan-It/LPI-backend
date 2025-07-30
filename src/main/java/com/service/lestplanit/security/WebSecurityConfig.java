@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableMethodSecurity
@@ -29,6 +35,19 @@ public class WebSecurityConfig {
     @Autowired
     private JwtAuthorizationFilter authorizationFilter;
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true); // If you need to send cookies or Authorization header
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     /**
      * Configures the security filter chain for HTTP requests.
      *
@@ -40,32 +59,27 @@ public class WebSecurityConfig {
     // TODO: Update defining the paths permissions.
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .build();
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
+        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
-//        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
-//        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
-//        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-//
-//        return httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> {
-//                    auth.requestMatchers("/persons").permitAll();
-//                    auth.requestMatchers("/persons/**").permitAll();
-//                    auth.requestMatchers("/events").permitAll();
-//                    auth.requestMatchers("/events/**").permitAll();
-//                    auth.requestMatchers("/system-users").permitAll();
-//                    auth.anyRequest().authenticated();
-//                })
-//                .sessionManagement(session -> {
-//                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                })
-//                .addFilter(jwtAuthenticationFilter)
-//                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
+        return httpSecurity
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/persons").permitAll();
+                    auth.requestMatchers("/persons/**").permitAll();
+                    auth.requestMatchers("/events").permitAll();
+                    auth.requestMatchers("/events/**").permitAll();
+//                    auth.requestMatchers("/system-users").permitAll(); // Need to be authenticated to access to this entrypoint
+                    auth.anyRequest().authenticated();
+                })
+                .sessionManagement(session -> {
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .addFilter(jwtAuthenticationFilter)
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     /**
